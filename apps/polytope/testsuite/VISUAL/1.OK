@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!DOCTYPE jvx-model SYSTEM "http://www.javaview.de/rsrc/jvx.dtd">
+<jvx-model>
+  <meta generator="polymake for paffenho"/>
+  <meta date="Wed May 16 16:27:33 2012"/>
+  <version type="dump">1.0</version>
+  <title>Polytopal subdivision of 1</title>
+  <geometries>
+    <geometry name="1">
+      <pointSet dim="3" point="hide" color="hide" thicknesses="hide">
+        <points>
+          <p name="0">1 -2 1</p>
+          <p name="1">-2 1 1</p>
+          <p name="2">1 1 1</p>
+          <p name="3">1 1 0</p>
+          <p name="4">1 -3 0</p>
+          <p name="5">-1 1 -2</p>
+          <p name="6">-9 -3 -10</p>
+          <p name="7">-5 1 -2</p>
+          <thickness>4</thickness>
+          <color type="rgb">255 0 0</color>
+          <labelAtt visible="show"/>
+        </points>
+      </pointSet>
+      <faceSet face="hide" edge="hide" backface="show" color="hide">
+        <faces>
+          <f>1 0 2</f>
+          <f>4 0 1 7 6</f>
+          <f>2 0 4 3</f>
+          <f>1 2 3 5 7</f>
+          <f>3 4 6 5</f>
+          <f>7 5 6</f>
+          <color type="rgb">119 236 158</color>
+          <labelAtt visible="hide"/>
+        </faces>
+        <neighbours>
+          <nb>2 3 1</nb>
+          <nb>0 3 5 4 2</nb>
+          <nb>1 4 3 0</nb>
+          <nb>2 4 5 1 0</nb>
+          <nb>1 5 3 2</nb>
+          <nb>4 1 3</nb>
+        </neighbours>
+      </faceSet>
+    </geometry>
+    <geometry name="unnamed__1">
+      <pointSet dim="3" point="show" color="hide" thicknesses="hide">
+        <points>
+          <p>0 -3 -1</p>
+          <p>-1 -2 -1</p>
+          <p>-2 -1 -1</p>
+          <p>-3 0 -1</p>
+          <p>-4 1 -1</p>
+          <p>1 -3 0</p>
+          <p>0 -2 0</p>
+          <p>1 -2 0</p>
+          <p>-1 -1 0</p>
+          <p>0 -1 0</p>
+          <p>-2 0 0</p>
+          <p>-1 0 0</p>
+          <p>-3 1 0</p>
+          <p>-2 1 0</p>
+          <p>1 -2 1</p>
+          <p>0 -1 1</p>
+          <p>1 -1 1</p>
+          <p>-1 0 1</p>
+          <p>0 0 1</p>
+          <p>1 0 1</p>
+          <p>-2 1 1</p>
+          <p>-1 1 1</p>
+          <p>0 1 1</p>
+          <thickness>4</thickness>
+          <color type="rgb">255 0 0</color>
+          <labelAtt visible="hide"/>
+        </points>
+      </pointSet>
+      <faceSet face="hide" edge="show" backface="show" color="hide">
+        <faces>
+          <f>5 0 7</f>
+          <f>22 4 20</f>
+          <f>4 0 5 14 20</f>
+          <f>7 0 4 22 19</f>
+          <f>5 7 19 14</f>
+          <f>19 22 20 14</f>
+          <color type="rgb">119 236 158</color>
+          <labelAtt visible="hide"/>
+        </faces>
+        <neighbours>
+          <nb>3 4 2</nb>
+          <nb>2 5 3</nb>
+          <nb>0 4 5 1 3</nb>
+          <nb>2 1 5 4 0</nb>
+          <nb>3 5 2 0</nb>
+          <nb>1 2 4 3</nb>
+        </neighbours>
+        <edges>
+           <color type="rgb">0 0 0</color>
+        </edges>
+      </faceSet>
+    </geometry>
+    <geometry name="unnamed__2">
+      <pointSet dim="3" point="show" color="hide" thicknesses="hide">
+        <points>
+          <p>0 -3 -1</p>
+          <p>-1 -2 -1</p>
+          <p>0 -2 -1</p>
+          <p>-2 -1 -1</p>
+          <p>-1 -1 -1</p>
+          <p>0 -1 -1</p>
+          <p>-3 0 -1</p>
+          <p>-2 0 -1</p>
+          <p>-1 0 -1</p>
+          <p>0 0 -1</p>
+          <p>-4 1 -1</p>
+          <p>-3 1 -1</p>
+          <p>-2 1 -1</p>
+          <p>-1 1 -1</p>
+          <p>0 1 -1</p>
+          <p>1 -2 0</p>
+          <p>0 -1 0</p>
+          <p>1 -1 0</p>
+          <p>-1 0 0</p>
+          <p>0 0 0</p>
+          <p>1 0 0</p>
+          <p>-2 1 0</p>
+          <p>-1 1 0</p>
+          <p>0 1 0</p>
+          <p>1 1 0</p>
+          <p>1 0 1</p>
+          <p>0 1 1</p>
+          <p>1 1 1</p>
+          <thickness>4</thickness>
+          <color type="rgb">255 0 0</color>
+          <labelAtt visible="hide"/>
+        </points>
+      </pointSet>
+      <faceSet face="hide" edge="show" backface="show" color="hide">
+        <faces>
+          <f>0 14 24 15</f>
+          <f>10 14 0</f>
+          <f>0 15 25 26 10</f>
+          <f>27 26 25</f>
+          <f>24 14 10 26 27</f>
+          <f>15 24 27 25</f>
+          <color type="rgb">119 236 158</color>
+          <labelAtt visible="hide"/>
+        </faces>
+        <neighbours>
+          <nb>4 5 2 1</nb>
+          <nb>0 2 4</nb>
+          <nb>5 3 4 1 0</nb>
+          <nb>2 5 4</nb>
+          <nb>1 2 3 5 0</nb>
+          <nb>4 3 2 0</nb>
+        </neighbours>
+        <edges>
+           <color type="rgb">0 0 0</color>
+        </edges>
+      </faceSet>
+    </geometry>
+    <geometry name="unnamed__3">
+      <pointSet dim="3" point="show" color="hide" thicknesses="hide">
+        <points>
+          <p>-9 -3 -10</p>
+          <p>-8 -3 -9</p>
+          <p>-8 -2 -8</p>
+          <p>-7 -3 -8</p>
+          <p>-7 -2 -8</p>
+          <p>-7 -2 -7</p>
+          <p>-7 -1 -6</p>
+          <p>-6 -3 -7</p>
+          <p>-6 -2 -7</p>
+          <p>-6 -2 -6</p>
+          <p>-6 -1 -6</p>
+          <p>-6 -1 -5</p>
+          <p>-6 0 -4</p>
+          <p>-5 -3 -6</p>
+          <p>-5 -2 -6</p>
+          <p>-5 -2 -5</p>
+          <p>-5 -1 -6</p>
+          <p>-5 -1 -5</p>
+          <p>-5 -1 -4</p>
+          <p>-5 0 -4</p>
+          <p>-5 0 -3</p>
+          <p>-5 1 -2</p>
+          <p>-4 -3 -5</p>
+          <p>-4 -2 -5</p>
+          <p>-4 -2 -4</p>
+          <p>-4 -1 -5</p>
+          <p>-4 -1 -4</p>
+          <p>-4 -1 -3</p>
+          <p>-4 0 -4</p>
+          <p>-4 0 -3</p>
+          <p>-4 0 -2</p>
+          <p>-4 1 -2</p>
+          <p>-4 1 -1</p>
+          <p>-3 -3 -4</p>
+          <p>-3 -2 -4</p>
+          <p>-3 -2 -3</p>
+          <p>-3 -1 -4</p>
+          <p>-3 -1 -3</p>
+          <p>-3 -1 -2</p>
+          <p>-3 0 -4</p>
+          <p>-3 0 -3</p>
+          <p>-3 0 -2</p>
+          <p>-3 0 -1</p>
+          <p>-3 1 -2</p>
+          <p>-3 1 -1</p>
+          <p>-2 -3 -3</p>
+          <p>-2 -2 -3</p>
+          <p>-2 -2 -2</p>
+          <p>-2 -1 -3</p>
+          <p>-2 -1 -2</p>
+          <p>-2 -1 -1</p>
+          <p>-2 0 -3</p>
+          <p>-2 0 -2</p>
+          <p>-2 0 -1</p>
+          <p>-2 1 -2</p>
+          <p>-2 1 -1</p>
+          <p>-1 -3 -2</p>
+          <p>-1 -2 -2</p>
+          <p>-1 -2 -1</p>
+          <p>-1 -1 -2</p>
+          <p>-1 -1 -1</p>
+          <p>-1 0 -2</p>
+          <p>-1 0 -1</p>
+          <p>-1 1 -2</p>
+          <p>-1 1 -1</p>
+          <p>0 -3 -1</p>
+          <p>0 -2 -1</p>
+          <p>0 -1 -1</p>
+          <p>0 0 -1</p>
+          <p>0 1 -1</p>
+          <thickness>4</thickness>
+          <color type="rgb">255 0 0</color>
+          <labelAtt visible="hide"/>
+        </points>
+      </pointSet>
+      <faceSet face="hide" edge="show" backface="show" color="hide">
+        <faces>
+          <f>0 21 63</f>
+          <f>32 21 0 65</f>
+          <f>63 21 32 69</f>
+          <f>0 63 69 65</f>
+          <f>69 32 65</f>
+          <color type="rgb">119 236 158</color>
+          <labelAtt visible="hide"/>
+        </faces>
+        <neighbours>
+          <nb>2 3 1</nb>
+          <nb>0 3 4 2</nb>
+          <nb>1 4 3 0</nb>
+          <nb>2 4 1 0</nb>
+          <nb>1 3 2</nb>
+        </neighbours>
+        <edges>
+           <color type="rgb">0 0 0</color>
+        </edges>
+      </faceSet>
+    </geometry>
+  </geometries>
+</jvx-model>

@@ -1,0 +1,289 @@
+###########################################################################
+#
+#  Copyright (c) 2010-12 Andreas Paffenholz
+# 
+#  This program is free software; you can redistribute it and/or modify it
+#  under the terms of the GNU General Public License as published by the
+#  Free Software Foundation; either version 2, or (at your option) any
+#  later version: http://www.gnu.org/licenses/gpl.txt.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#############################################################################
+
+
+user_function lattice_subdivision(Matrix<Rational>, Matrix<Integer>, Matrix<Integer>) : c++ (include => [ "polymake/polytope/subdivisions.h" ]);
+
+user_function subdivision_cells(Matrix<Rational>, Matrix<Integer>, Matrix<Integer>, Matrix<Integer>) : c++ (include => [ "polymake/polytope/subdivisions.h" ]);
+
+object LatticePolytope {
+
+    # a subdivision of the polytope
+    declare object Subdivision {
+	
+	# the hyperplanes defining a subdivision
+	property SUBDIVISION_HYPERPLANES : Matrix<Integer>;
+	
+	# true if the vertices of the cells in the subdivision are lattice points
+	property LATTICE_SUBDIVISION : Bool;
+	
+	# the list of all coordinate directions in which the subdivision can be projected
+	property VALID_PROJECTION_COORDINATES : Set<Int>;
+	
+	# the list of cells of the subdivision
+	# the indices correspond the the list of [[LATTICE_POINTS]]
+	property CELLS : Array<Set<Int>>;
+	
+    }
+
+    # a subdivision of the polytope
+    property SUBDIVISION : Subdivision : multiple;
+
+    # the dimension of the lowest successive projection  
+    # along coordinate directions that preserves a given subdivision 
+    # and the additional subdivision hyperplanes given by facet intersections
+    property LOWEST_PROJECTION_DIMENSION : Int;
+
+    # a sequence of projections achieving the [[LOWEST_PROJECTION_DIMENSION]]
+    property LOWEST_PROJECTION_SEQUENCE : Array<Integer>;
+
+    # all sequence of projections achieving the [[LOWEST_PROJECTION_DIMENSION]]
+    property PROJECTION_SEQUENCES : Array<Array<Integer>>;
+
+
+    property NORMALIZED_LOWEST_PROJECTION_DIMENSION : Int;
+
+    property NORMALIZED_LOWEST_PROJECTION_SEQUENCE : Array<Integer>;
+
+    property NORMALIZED_LOWEST_PROJECTION_VERTEX : Int;
+
+
+    rule PROJECTION_SEQUENCES, LOWEST_PROJECTION_DIMENSION : VERTICES, FACETS, VERTICES_IN_FACETS, DUAL_GRAPH.ADJACENCY, CONE_AMBIENT_DIM, CONE_DIM {
+	my $pair = check_all_projections($this,0);
+	$this->LOWEST_PROJECTION_DIMENSION = $pair->first;
+	$this->PROJECTION_SEQUENCES = $pair->second->second;
+    }
+    weight 5.20;
+
+    rule LOWEST_PROJECTION_DIMENSION, LOWEST_PROJECTION_SEQUENCE : VERTICES, FACETS, VERTICES_IN_FACETS, DUAL_GRAPH.ADJACENCY, CONE_AMBIENT_DIM, CONE_DIM {
+	my $pair = check_all_projections($this,1);
+	$this->LOWEST_PROJECTION_DIMENSION = $pair->first;
+	$this->LOWEST_PROJECTION_SEQUENCE = $pair->second->second->[0];
+    }
+    weight 5.10;
+
+    rule LOWEST_PROJECTION_DIMENSION : PROJECTION_SEQUENCES, CONE_DIM {
+	my $dim = $this->CONE_DIM;
+	my $i = 0;
+	foreach (@{$this->PROJECTION_SEQUENCES}) {
+	    my $s = scalar(@{$_});
+	    if ( $s > $i ) {
+		$i = $s;
+	    }
+	}
+	$this->LOWEST_PROJECTION_DIMENSION = $dim - 1 - $i;
+    }
+    weight 1.10;
+
+    rule NORMALIZED_LOWEST_PROJECTION_DIMENSION, NORMALIZED_LOWEST_PROJECTION_SEQUENCE, NORMALIZED_LOWEST_PROJECTION_VERTEX : VERTICES, FACETS, VERTICES_IN_FACETS, FACETS_THRU_VERTICES, DUAL_GRAPH.ADJACENCY, CONE_AMBIENT_DIM, CONE_DIM {
+	my $pair = check_all_projections($this,1,1);
+	$this->NORMALIZED_LOWEST_PROJECTION_DIMENSION = $pair->first;
+	$this->NORMALIZED_LOWEST_PROJECTION_VERTEX = $pair->second->first;
+	$this->NORMALIZED_LOWEST_PROJECTION_SEQUENCE = $pair->second->second->[0];
+    }
+    weight 5.10;
+
+    
+    rule SUBDIVISION.LATTICE_SUBDIVISION : VERTICES, FACETS, SUBDIVISION.SUBDIVISION_HYPERPLANES {
+	my $f = primitive(new Matrix<Rational>($this->FACETS));
+	foreach (@{$f}) { $_ = div_exact($_,gcd($_)); }
+	my $s = primitive(new Matrix<Rational>($this->SUBDIVISION->SUBDIVISION_HYPERPLANES));
+	foreach (@{$s}) { $_ = div_exact($_,gcd($_)); }
+
+	$this->SUBDIVISION->LATTICE_SUBDIVISION = lattice_subdivision($this->VERTICES, $f, $s);
+    }
+    
+    rule SUBDIVISION.VALID_PROJECTION_COORDINATES : FACETS {
+
+	my $s = new Set<Int>();
+	my $m = primitive(new Matrix<Rational>($this->FACETS));
+	foreach (@{$m}) { $_ = div_exact($_,gcd($_)); }
+
+	if ( defined ( my $sdh = $this->lookup("SUBDIVISION.SUBDIVISION_HYPERPLANES") ) )   {
+	    my $sd = new Matrix<Integer>($sdh);
+	    foreach (@{$sd}) { $_ = div_exact($_,gcd($_)); }
+	    $m /= $sd;
+	}
+
+	foreach my $i (1..$m->cols-1 ) {
+	    my $b = 1;
+	    my $j = 0;
+	    while ( $j < $m->rows() && $b ) {
+		if ( abs($m->($j,$i) ) > 1 ) { $b = 0; }
+		++$j;
+	    }
+	    if ( $b ) { $s += $i; }
+	}
+	
+	$this->SUBDIVISION->VALID_PROJECTION_COORDINATES = $s;
+    }
+    
+    rule SUBDIVISION.CELLS : SUBDIVISION.SUBDIVISION_HYPERPLANES, SUBDIVISION.LATTICE_SUBDIVISION, LATTICE_POINTS, FACETS, VERTICES {
+	if ( !$this->SUBDIVISION->LATTICE_SUBDIVISION ) {
+	    croak ( "subdivision is not integral\n" )
+	}
+	my $f = primitive(new Matrix<Rational>($this->FACETS));
+	foreach (@{$f}) { $_ = div_exact($_,gcd($_)); }
+	my $s = primitive(new Matrix<Rational>($this->SUBDIVISION->SUBDIVISION_HYPERPLANES));
+	foreach (@{$s}) { $_ = div_exact($_,gcd($_)); }	
+	my $lp = new Matrix<Integer>($this->LATTICE_POINTS);
+	$this->SUBDIVISION->CELLS = subdivision_cells($this->VERTICES, $f, $s, $lp );
+    }
+
+
+
+
+################################################
+############## subdivision user methods
+
+
+    object Subdivision {
+
+# returns a particular cell of the SUBDIVISION
+# @param n the index of the cell
+# @return Polytope the cell
+	
+	user_method CELL {
+	    
+	    my $this = shift;
+	    my $n = shift;
+	    if ( !defined( $this->parent->lookup("SUBDIVISION") )
+		 || !defined( $this->parent->lookup("SUBDIVISION.SUBDIVISION_HYPERPLANES") ) ) {
+		return $this->parent;
+	    }
+	    my $c = $this->CELLS;
+	    
+	    my $lp = $this->parent->give("LATTICE_POINTS");
+	    
+	    if ( $n >= scalar(@{$c}) ) {
+		die "range error\n";
+	    } else {
+		my $q = new Polytope<Rational>(POINTS=>$lp->minor($c->[$n],All));
+		return $q;
+	    }
+	}
+
+    }
+    
+##############
+#### visualization of a subdivsion
+
+
+    package Visual::Polytope;
+
+# visualizes a polytope together with its subdivision
+    
+    user_method SUBDIVISION(;%Visual::Polygons::decorations) {
+	my ($self, $decor)=@_;
+	my $d=$self->Polytope->CONE_AMBIENT_DIM;
+	if ($d > 4) {
+	    die "don't know how to visualize the subdivision of a $d-d polytope with subdivision\n";
+	}
+	$self->Name="Polytopal subdivision of ".$self->Polytope->name;
+	my $pc=$self->Polytope->LATTICE_POINTS;
+	my $psd=$self->Polytope->SUBDIVISION->CELLS;
+	my @faces=();
+	my @pointsets=();
+	
+	my $skeleton=$self->basis_solid;
+	$skeleton->EdgeStyle="hidden";
+	$skeleton->VertexStyle="hidden";
+	$skeleton->FacetStyle="hidden";
+	if ( $d == 4 ) {
+	    foreach (@{$psd}) {
+		my $p=new polytope::Polytope<Rational>(POINTS=>$pc->minor($_,All));
+		my $ppc=new polytope::PointConfiguration<Rational>(POINTS=>$p->LATTICE_POINTS);
+		my $P=new Visual::Polygons( Vertices => dehomogenize(convert_to<Float>($ppc->POINTS)),
+					    Facets => $ppc->PIF_CYCLIC_NORMAL,
+					    VertexLabels => "hidden",
+					    FacetStyle=>"hidden",
+					    FacetNeighbors => $ppc->CONVEX_HULL->NEIGHBOR_FACETS_CYCLIC_NORMAL,
+					    Closed => 1,
+					    $decor
+		    );
+		push @faces, new Visual::Polytope(Polytope=>$p,$P);
+	    }
+	} else {
+	    foreach (@{$psd}) {
+		my $p=new polytope::Polytope<Rational>(POINTS=>$pc->minor($_,All));
+		my $ppc=new polytope::PointConfiguration<Rational>(POINTS=>$p->LATTICE_POINTS);
+		my $P=new Visual::Polygon(Vertices => dehomogenize(convert_to<Float>($ppc->POINTS)),
+					  VertexLabels => "hidden",
+					  FacetStyle=>"hidden",
+					  Facet => $ppc->PIF_CYCLIC_NORMAL->[0],
+					  $decor
+		    );
+		push @{faces}, new Visual::Polytope(Polytope=>$p,$P);
+	    }
+	}
+	compose($self,@faces);
+    }
+    
+}
+
+
+# projects a polytope with [[SUBDIVISION]]
+# along a sequence of coordinates
+# @param Polytope the polytope to project
+# @param Array<int> an array of coordinates
+# @return Polytope the projected polytope
+
+    user_function project_along_sequence ( Polytope, Array )  {
+	
+	my $this = shift;
+	my $seq = shift;
+	
+	my $q = new Polytope<Rational>($this);
+
+	foreach (@{$seq}) {
+	    if ( !$q->SUBDIVISION->VALID_PROJECTION_COORDINATES->contains($_) ) {
+		die "not a valid projection coordinate\n";
+	    }
+	    $q = project_with_subdivision($q,$_);
+	    if ( !$q->SUBDIVISION->LATTICE_SUBDIVISION ) {
+		die "not a lattice subdivision\n";
+	    }
+	}
+	
+	return $q;
+    }
+
+    
+# computes all cells of a subdivision_cells
+# and returns them as an array of polytopes
+# @return Array<Polytope> the cells
+
+user_function subdivision_cell_array {
+    
+    my $this = shift;
+    my @a = ();
+    if ( !defined ( $this->lookup("SUBDIVISION.SUBDIVISION_HYPERPLANES") ) )  {
+	push @a, $this;
+	return @a;
+    }
+    
+    my $lp = $this->give("LATTICE_POINTS");
+    my $c = $this->give("SUBDIVISION.CELLS");
+    
+    foreach (@{$c}) {
+	my $q = new Polytope<Rational>(POINTS=>$lp->minor($_,All));
+	push @a, $q;
+    }
+    
+    return @a;
+}
+
+

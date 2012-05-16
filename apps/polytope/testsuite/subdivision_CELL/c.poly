@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?pm chk="4fb3bf65"?>
+
+<object name="1" type="polytope::LatticePolytope" version="2.12" xmlns="http://www.math.tu-berlin.de/polymake/#3">
+  <credit product="normaliz2"><![CDATA[
+Copyright by Winfried Bruns, Bogdan Ichim, Christof Soeger.
+http://www.math.uos.de/normaliz/
+]]></credit>
+  <property name="FACETS">
+    <m>
+      <v>1 0 0 -1</v>
+      <v>2 1 1 -1</v>
+      <v>1 -1 0 0</v>
+      <v>1 0 -1 0</v>
+      <v>1 -1 0 1</v>
+      <v>4 0 -2 1</v>
+    </m>
+  </property>
+  <property name="VERTICES">
+    <m>
+      <v>1 1 -2 1</v>
+      <v>1 -2 1 1</v>
+      <v>1 1 1 1</v>
+      <v>1 1 1 0</v>
+      <v>1 1 -3 0</v>
+      <v>1 -1 1 -2</v>
+      <v>1 -9 -3 -10</v>
+      <v>1 -5 1 -2</v>
+    </m>
+  </property>
+  <property name="VERTICES_IN_FACETS">
+    <m cols="8">
+      <v>0 1 2</v>
+      <v>0 1 4 6 7</v>
+      <v>0 2 3 4</v>
+      <v>1 2 3 5 7</v>
+      <v>3 4 5 6</v>
+      <v>5 6 7</v>
+    </m>
+  </property>
+  <property name="CONE_DIM" value="4" />
+  <property name="DUAL_GRAPH">
+    <object>
+      <property name="ADJACENCY">
+        <m>
+          <v>1 2 3</v>
+          <v>0 2 3 4 5</v>
+          <v>0 1 3 4</v>
+          <v>0 1 2 4 5</v>
+          <v>1 2 3 5</v>
+          <v>1 3 4</v>
+        </m>
+      </property>
+    </object>
+  </property>
+  <property name="SUBDIVISION">
+    <object>
+      <property name="SUBDIVISION_HYPERPLANES">
+        <m>
+          <v>1 0 0 1</v>
+          <v>-1 -1 -1 2</v>
+        </m>
+      </property>
+      <property name="LATTICE_SUBDIVISION" value="true" />
+      <property name="CELLS">
+        <m>
+          <v>55 65 80 81 85 90 91 93</v>
+          <v>55 65 69 81 84 90 93 94</v>
+          <v>0 40 54 55 65 69</v>
+        </m>
+      </property>
+    </object>
+  </property>
+  <property name="CONE_AMBIENT_DIM" value="4" />
+  <property name="N_VERTICES" value="8" />
+  <property name="FEASIBLE" value="true" />
+  <property name="POINTED" value="true" />
+  <property name="SIMPLE" value="true" />
+  <property name="SIMPLE_POLYHEDRON" value="true" />
+  <property name="LATTICE_VOLUME" value="261" />
+  <property name="EHRHART_POLYNOMIAL_COEFF">
+    <v>1 11 79/2 87/2</v>
+  </property>
+  <property name="H_STAR_VECTOR">
+    <v>1 91 155 14</v>
+  </property>
+  <property name="LATTICE_POINTS">
+    <m>
+      <v>1 -9 -3 -10</v>
+      <v>1 -8 -3 -9</v>
+      <v>1 -8 -2 -8</v>
+      <v>1 -7 -3 -8</v>
+      <v>1 -7 -2 -8</v>
+      <v>1 -7 -2 -7</v>
+      <v>1 -6 -3 -7</v>
+      <v>1 -6 -2 -7</v>
+      <v>1 -7 -1 -6</v>
+      <v>1 -6 -2 -6</v>
+      <v>1 -6 -1 -6</v>
+      <v>1 -5 -3 -6</v>
+      <v>1 -5 -2 -6</v>
+      <v>1 -5 -1 -6</v>
+      <v>1 -6 -1 -5</v>
+      <v>1 -5 -2 -5</v>
+      <v>1 -5 -1 -5</v>
+      <v>1 -4 -3 -5</v>
+      <v>1 -4 -2 -5</v>
+      <v>1 -4 -1 -5</v>
+      <v>1 -6 0 -4</v>
+      <v>1 -5 -1 -4</v>
+      <v>1 -5 0 -4</v>
+      <v>1 -4 -2 -4</v>
+      <v>1 -4 -1 -4</v>
+      <v>1 -4 0 -4</v>
+      <v>1 -3 -3 -4</v>
+      <v>1 -3 -2 -4</v>
+      <v>1 -3 -1 -4</v>
+      <v>1 -3 0 -4</v>
+      <v>1 -5 0 -3</v>
+      <v>1 -4 -1 -3</v>
+      <v>1 -4 0 -3</v>
+      <v>1 -3 -2 -3</v>
+      <v>1 -3 -1 -3</v>
+      <v>1 -3 0 -3</v>
+      <v>1 -2 -3 -3</v>
+      <v>1 -2 -2 -3</v>
+      <v>1 -2 -1 -3</v>
+      <v>1 -2 0 -3</v>
+      <v>1 -5 1 -2</v>
+      <v>1 -4 0 -2</v>
+      <v>1 -4 1 -2</v>
+      <v>1 -3 -1 -2</v>
+      <v>1 -3 0 -2</v>
+      <v>1 -3 1 -2</v>
+      <v>1 -2 -2 -2</v>
+      <v>1 -2 -1 -2</v>
+      <v>1 -2 0 -2</v>
+      <v>1 -2 1 -2</v>
+      <v>1 -1 -3 -2</v>
+      <v>1 -1 -2 -2</v>
+      <v>1 -1 -1 -2</v>
+      <v>1 -1 0 -2</v>
+      <v>1 -1 1 -2</v>
+      <v>1 -4 1 -1</v>
+      <v>1 -3 0 -1</v>
+      <v>1 -3 1 -1</v>
+      <v>1 -2 -1 -1</v>
+      <v>1 -2 0 -1</v>
+      <v>1 -2 1 -1</v>
+      <v>1 -1 -2 -1</v>
+      <v>1 -1 -1 -1</v>
+      <v>1 -1 0 -1</v>
+      <v>1 -1 1 -1</v>
+      <v>1 0 -3 -1</v>
+      <v>1 0 -2 -1</v>
+      <v>1 0 -1 -1</v>
+      <v>1 0 0 -1</v>
+      <v>1 0 1 -1</v>
+      <v>1 -3 1 0</v>
+      <v>1 -2 0 0</v>
+      <v>1 -2 1 0</v>
+      <v>1 -1 -1 0</v>
+      <v>1 -1 0 0</v>
+      <v>1 -1 1 0</v>
+      <v>1 0 -2 0</v>
+      <v>1 0 -1 0</v>
+      <v>1 0 0 0</v>
+      <v>1 0 1 0</v>
+      <v>1 1 -3 0</v>
+      <v>1 1 -2 0</v>
+      <v>1 1 -1 0</v>
+      <v>1 1 0 0</v>
+      <v>1 1 1 0</v>
+      <v>1 -2 1 1</v>
+      <v>1 -1 0 1</v>
+      <v>1 -1 1 1</v>
+      <v>1 0 -1 1</v>
+      <v>1 0 0 1</v>
+      <v>1 0 1 1</v>
+      <v>1 1 -2 1</v>
+      <v>1 1 -1 1</v>
+      <v>1 1 0 1</v>
+      <v>1 1 1 1</v>
+    </m>
+  </property>
+</object>
