@@ -23,7 +23,7 @@
 #include <polymake/Array.h>
 #include <polymake/Set.h>
 #include <polymake/polytope/subdivisions.h>
-
+#include <polymake/common/lattice_tools.h>
 
 namespace polymake { namespace polytope {
 
@@ -35,11 +35,18 @@ namespace polymake { namespace polytope {
 	throw std::runtime_error("project_with_subdivision: polytope must be full dimensional\n");       
       }
 
-      Matrix<Rational> SH(0,adim-1);	
+      Matrix<Rational> RSH(0,adim-1);	
+      Matrix<Integer> SH(0,adim-1);	
       if ( p.lookup("SUBDIVISION") ) 
-	p.lookup("SUBDIVISION.SUBDIVISION_HYPERPLANES") >> SH;
+	p.lookup("SUBDIVISION.SUBDIVISION_HYPERPLANES") >> RSH;
       
-      Matrix<Rational> F = p.give("FACETS");
+      if ( RSH.rows() > 0 ) {
+	SH.resize(RSH.rows(),RSH.cols());
+	SH = common::primitive(RSH);
+      }
+
+      Matrix<Rational> RF = p.give("FACETS");
+      Matrix<Integer> F = common::primitive(RF);
       Matrix<Rational> V = p.give("VERTICES");
       IncidenceMatrix<> VIF = p.give("VERTICES_IN_FACETS");
       Graph<> DG = p.give("DUAL_GRAPH.ADJACENCY");

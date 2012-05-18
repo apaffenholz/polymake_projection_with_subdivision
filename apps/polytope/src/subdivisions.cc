@@ -14,6 +14,7 @@
 
 
 #include <polymake/polytope/subdivisions.h>
+#include <polymake/common/lattice_tools.h>
 
 namespace polymake { namespace polytope { namespace subdivision {
     
@@ -77,7 +78,6 @@ namespace polymake { namespace polytope { namespace subdivision {
 	for ( Entire<Rows<Matrix<Integer> > >::const_iterator fit = entire(rows(PF)); !fit.at_end(); ++fit ) 
 	  if ( abs((*fit)[c]) > 1 )
 	    throw std::runtime_error("project_with_subdivision: not a valid projection coordinate\n");       
-	
 	for ( Entire<Rows<Matrix<Integer> > >::const_iterator sdit = entire(rows(PSubdivision)); !sdit.at_end(); ++sdit ) 
 	  if ( abs((*sdit)[c]) > 1 )
 	    throw std::runtime_error("project_with_subdivision: not a valid projection coordinate\n");       
@@ -88,7 +88,8 @@ namespace polymake { namespace polytope { namespace subdivision {
 	q.take("POINTS") << SP.vertices().minor(All,~range(c,c));      
 
 	Matrix<Rational> QV = q.give("VERTICES");
-	Matrix<Integer> QF = primitive(multiply_by_common_denominator(q.give("FACETS")));
+	Matrix<Rational> FR = q.give("FACETS");
+	Matrix<Integer> QF = common::primitive(FR);
 
 	Matrix<Integer>  QSubdivision(0,QF.cols());  // the new subdivision hyperplanes
 
@@ -117,7 +118,7 @@ namespace polymake { namespace polytope { namespace subdivision {
 	    
 	    
 	    for ( int j = 0; j < PSubdivision.rows(); ++j )  		// combine with subdivision hyperplanes
-	      if ( PSubdivision(j,c) != 0 ) // otherwise it's already projected
+	      if ( PSubdivision(j,c) != 0 )                             // otherwise it's already projected
 		if ( hyperplane_intersects(PSubdivision.row(j),VSP) &&  hyperplane_intersects(PSubdivision.row(j),VSM) ) {
 		  Vector<Integer> w(QF.cols());
 		  if ( PSubdivision(i,c) == PSubdivision(j,c) ) 
@@ -130,7 +131,7 @@ namespace polymake { namespace polytope { namespace subdivision {
 	    
 	  
 	    for ( int j = 0; j < PF.rows(); ++j ) // combine with subdivision hyperplanes
-	      if ( PF(j,c) != 0 ) // otherwise it's already projected
+	      if ( PF(j,c) != 0 )                 // otherwise it's already projected
 		if ( hyperplane_intersects(  PSubdivision.row(i), SP.vertices().minor(SP.vertices_in_facets().row(j),All) ) ) {
 		  Vector<Integer> w(QF.cols());
 		  if ( PSubdivision(i,c) == PF(j,c) ) 
@@ -142,9 +143,8 @@ namespace polymake { namespace polytope { namespace subdivision {
 		}
 	  }
 	
-	// combine facets with facets, but only adjacent ones!
-	for ( int i = 0; i < PF.rows(); ++i ) 
-	  if ( PF(i,c) != 0 )  // otherwise it's already projected
+	for ( int i = 0; i < PF.rows(); ++i ) 	   // combine facets with facets, but only adjacent ones!
+	  if ( PF(i,c) != 0 )                      // otherwise it's already projected
 	    for ( int j = 0; j < PF.rows(); ++j )  // combine with subdivision hyperplanes
 	      if ( SP.dual_graph().edge_exists(i,j) && PF(j,c) != 0 ) {
 		Vector<Integer> w(QF.cols());
@@ -156,10 +156,8 @@ namespace polymake { namespace polytope { namespace subdivision {
 		  QSubdivision /= w;
 	      }
 
-	return SubdividedPolytope(QF,QV,make_equations_unique(primitive(QSubdivision)));
-	
+	return SubdividedPolytope(QF,QV,make_equations_unique(common::primitive(QSubdivision)));
       }
-
     }
     
     // computes the cells of a subdivision and matches the vertices with the lattice points of the polytope

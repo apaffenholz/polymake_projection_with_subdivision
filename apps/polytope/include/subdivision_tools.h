@@ -31,14 +31,6 @@
 
 namespace polymake { namespace polytope { namespace subdivision {
       
-      Integer common_denominator(const Vector<Rational> v);
-      
-      Vector<Integer> scale_to_integral(const Vector<Rational>& v);
-      
-      Matrix<Integer> multiply_by_common_denominator(const Matrix<Rational>& M);
-      
-      Matrix<Integer> primitive(const Matrix<Integer>& M); 
-    
       IncidenceMatrix<> construct_vif (const Matrix<Integer>& F, const Matrix<Rational>& V);
 	
 	template <typename Iterator>

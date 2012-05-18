@@ -26,6 +26,7 @@
 #include <polymake/polytope/cdd_interface.h>
 #include <polymake/linalg.h>
 #include <polymake/polytope/subdivision_tools.h>
+#include <polymake/common/lattice_tools.h>
 
 namespace polymake { namespace polytope { namespace subdivision {
 
@@ -48,7 +49,7 @@ namespace polymake { namespace polytope { namespace subdivision {
 	Matrix<Rational> Lin(0,I.cols());
 	_vertices = solver.enumerate_vertices(Matrix<Rational>(I),AH).first;
 	cdd_interface::solver<Rational>::matrix_pair F=solver.enumerate_facets(_vertices,Lin);
-	_facets = primitive(multiply_by_common_denominator(F.first)); 
+	_facets = common::primitive(F.first); 
       }
       
       SubdivisionCell ( const SubdivisionCell & SC ) {
