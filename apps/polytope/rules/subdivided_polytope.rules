@@ -131,7 +131,7 @@ object LatticePolytope {
 	$this->SUBDIVISION->VALID_PROJECTION_COORDINATES = $s;
     }
     
-    rule SUBDIVISION.CELLS : SUBDIVISION.SUBDIVISION_HYPERPLANES, SUBDIVISION.LATTICE_SUBDIVISION, LATTICE_POINTS, FACETS, VERTICES {
+    rule SUBDIVISION.CELLS : SUBDIVISION.SUBDIVISION_HYPERPLANES, SUBDIVISION.LATTICE_SUBDIVISION, LATTICE_POINTS_GENERATORS, FACETS, VERTICES {
 	if ( !$this->SUBDIVISION->LATTICE_SUBDIVISION ) {
 	    croak ( "subdivision is not integral\n" )
 	}
@@ -166,7 +166,8 @@ object LatticePolytope {
 	    }
 	    my $c = $this->CELLS;
 	    
-	    my $lp = $this->parent->give("LATTICE_POINTS");
+	    my $lp_gen = $this->parent->give("LATTICE_POINTS_GENERATORS");
+	    my $lp = $lp_gen->[0];  # we hopefully have a bounded polytope
 	    
 	    if ( $n >= scalar(@{$c}) ) {
 		die "range error\n";
@@ -193,7 +194,8 @@ object LatticePolytope {
 	    die "don't know how to visualize the subdivision of a $d-d polytope with subdivision\n";
 	}
 	$self->Name="Polytopal subdivision of ".$self->Polytope->name;
-	my $pc=$self->Polytope->LATTICE_POINTS;
+	my $pc_gen=$self->Polytope->LATTICE_POINTS_GENERATORS;
+	my $pc=$pc_gen->[0];
 	my $psd=$self->Polytope->SUBDIVISION->CELLS;
 	my @faces=();
 	my @pointsets=();
@@ -275,7 +277,8 @@ user_function subdivision_cell_array {
 	return @a;
     }
     
-    my $lp = $this->give("LATTICE_POINTS");
+    my $lp_gen = $this->give("LATTICE_POINTS_GENERATORS");
+    my $lp = $lp_gen->[0];
     my $c = $this->give("SUBDIVISION.CELLS");
     
     foreach (@{$c}) {

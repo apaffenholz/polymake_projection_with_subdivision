@@ -30,7 +30,6 @@ namespace polymake { namespace common {
    };
 
    OperatorInstance4perl(BinaryAssign_div, perl::Canned< Wary< Matrix< Integer > > >, perl::Canned< const Matrix< Integer > >);
-   OperatorInstance4perl(assign, Matrix< Rational >, perl::Canned< const Matrix< Integer > >);
    FunctionInstance4perl(new_X, Matrix< Rational >, perl::Canned< const pm::MatrixMinor<pm::Matrix<pm::Integer> const&, pm::Set<int, pm::operations::cmp> const&, pm::all_selector const&> >);
 ///==== Automatically generated contents end here.  Please do not delete this line. ====
 } }
