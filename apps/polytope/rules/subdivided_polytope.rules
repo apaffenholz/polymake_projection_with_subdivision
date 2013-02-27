@@ -214,6 +214,7 @@ object LatticePolytope {
 					    FacetStyle=>"hidden",
 					    FacetNeighbors => $ppc->CONVEX_HULL->NEIGHBOR_FACETS_CYCLIC_NORMAL,
 					    Closed => 1,
+					    NEdges => $ppc->CONVEX_HULL->N_EDGES,
 					    $decor
 		    );
 		push @faces, new Visual::Polytope(Polytope=>$p,$P);
@@ -226,9 +227,11 @@ object LatticePolytope {
 					  VertexLabels => "hidden",
 					  FacetStyle=>"hidden",
 					  Facet => $ppc->PIF_CYCLIC_NORMAL->[0],
+					  NEdges => $ppc->CONVEX_HULL->N_EDGES,
+					  FacetTransparency => 0.5,
 					  $decor
 		    );
-		push @{faces}, new Visual::Polytope(Polytope=>$p,$P);
+		push @{faces}, new Visual::PointConfiguration(PointConfiguration=>$ppc,$P);
 	    }
 	}
 	compose($self,@faces);
