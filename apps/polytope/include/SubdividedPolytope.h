@@ -135,21 +135,20 @@ namespace polymake { namespace polytope { namespace subdivision {
       }
 
       // create a SubdividedPolytope from a set of facets, vertices, and subdivision hyperplanes
-      SubdividedPolytope(const Matrix<Integer> & F, const Matrix<Rational>& V, const Matrix<Integer> & S) {
-	_facets = F;
-	_subdivision_hyperplanes = S;
-	_vertices = V;
+    SubdividedPolytope(const Matrix<Integer> & F, const Matrix<Rational>& V, const Matrix<Integer> & S) : _facets(F), _vertices(V),  _subdivision_hyperplanes(S), _dim(F.cols()-1) {
 
-	_dim = F.cols()-1;
 	IncidenceMatrix<> vifcheck = construct_vif(_facets, _vertices);
-	perl::Object q("Polytope<Rational>");
-	q.take("POINTS") << V;
-	q.take("FACETS") << F;
-	IncidenceMatrix<> VIF2 = q.give("VERTICES_IN_FACETS");
-	if ( VIF2 != vifcheck )
-	  { throw std::runtime_error("SubdividedPolytope: coordinate input not valid\n"); }
-	_vif = VIF2;
-	Graph<> DG = q.give("DUAL_GRAPH.ADJACENCY");
+	Matrix<Integer> empty;
+	perl::Object q1("Polytope<Rational>");
+	perl::Object q2("Polytope<Rational>");
+	q1.take("POINTS") << V;
+	q1.take("FACETS") << F;
+	q1.take("AFFINE_HULL") << empty;
+	q2.take("VERTICES_IN_FACETS") << vifcheck;   // FIXME this is not the intended solution, we should be able to check incidence matrices directly
+	if ( !CallPolymakeFunction("isomorphic", q1, q2 ) )  
+	  throw std::runtime_error("SubdividedPolytope: coordinate input not valid\n"); 
+	_vif = q1.give("VERTICES_IN_FACETS");
+	Graph<> DG = q1.give("DUAL_GRAPH.ADJACENCY");
 	_dg = DG;
       }
 

@@ -36,5 +36,6 @@ namespace polymake { namespace common {
    FunctionInstance4perl(new_X, Array< Integer >, perl::Canned< const Array< Integer > >);
    FunctionInstance4perl(new, Array< Array< Integer > >);
    FunctionInstance4perl(new_X, Array< Array< Integer > >, perl::Canned< const Array< Array< Integer > > >);
+   Class4perl("Polymake::common::Array__Integer", Array< Integer >);
 ///==== Automatically generated contents end here.  Please do not delete this line. ====
 } }

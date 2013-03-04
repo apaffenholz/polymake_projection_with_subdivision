@@ -211,7 +211,6 @@ object LatticePolytope {
 		my $P=new Visual::Polygons( Vertices => dehomogenize(convert_to<Float>($ppc->POINTS)),
 					    Facets => $ppc->PIF_CYCLIC_NORMAL,
 					    VertexLabels => "hidden",
-					    FacetStyle=>"hidden",
 					    FacetNeighbors => $ppc->CONVEX_HULL->NEIGHBOR_FACETS_CYCLIC_NORMAL,
 					    Closed => 1,
 					    NEdges => $ppc->CONVEX_HULL->N_EDGES,
@@ -225,7 +224,6 @@ object LatticePolytope {
 		my $ppc=new polytope::PointConfiguration<Rational>(POINTS=>$p->LATTICE_POINTS);
 		my $P=new Visual::Polygon(Vertices => dehomogenize(convert_to<Float>($ppc->POINTS)),
 					  VertexLabels => "hidden",
-					  FacetStyle=>"hidden",
 					  Facet => $ppc->PIF_CYCLIC_NORMAL->[0],
 					  NEdges => $ppc->CONVEX_HULL->N_EDGES,
 					  FacetTransparency => 0.5,
