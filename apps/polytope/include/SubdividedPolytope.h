@@ -147,7 +147,8 @@ namespace polymake { namespace polytope { namespace subdivision {
 	q2.take("VERTICES_IN_FACETS") << vifcheck;   // FIXME this is not the intended solution, we should be able to check incidence matrices directly
 	if ( !CallPolymakeFunction("isomorphic", q1, q2 ) )  
 	  throw std::runtime_error("SubdividedPolytope: coordinate input not valid\n"); 
-	_vif = q1.give("VERTICES_IN_FACETS");
+        IncidenceMatrix<> VIF = q1.give("VERTICES_IN_FACETS"); // need an explicit type for this...
+        _vif = VIF;
 	Graph<> DG = q1.give("DUAL_GRAPH.ADJACENCY");
 	_dg = DG;
       }
