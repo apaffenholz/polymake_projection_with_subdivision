@@ -44,14 +44,16 @@ namespace polymake { namespace polytope { namespace subdivision {
 	cells |= initial;
 	
 	// and successively intersect all cells with a subdivision hyperplane
-	for ( Entire<Rows<Matrix<Integer> > >::const_iterator sub = entire(rows(S)); !sub.at_end(); ++sub ) {
+	for ( auto sub = entire(rows(S)); !sub.at_end(); ++sub ) {
 	  
 	  Vector<SubdivisionCell> cells2;
-	  for ( Entire<Vector<SubdivisionCell> >::const_iterator c = entire(cells); !c.at_end(); ++c ) {
+	  for ( auto c = entire(cells); !c.at_end(); ++c ) {
 	    
 	    if ( sub_intersects(*sub,(*c).vertices()) ) {
-	      SubdivisionCell c1((*c).facets()/(*sub));
-	      SubdivisionCell c2((*c).facets()/(-(*sub)));
+				Vector<Integer> subderef = *sub;
+				Matrix<Integer> cderef = (*c).facets();
+	      SubdivisionCell c1(cderef/(subderef));
+	      SubdivisionCell c2(cderef/(-(subderef)));
 	      cells2 |= c1;
 	      cells2 |= c2;
 	    } else {
@@ -75,10 +77,10 @@ namespace polymake { namespace polytope { namespace subdivision {
 	Matrix<Integer> PSubdivision = SP.subdivision_hyperplanes();
 
 	// check that we are allowed to project in direction c 
-	for ( Entire<Rows<Matrix<Integer> > >::const_iterator fit = entire(rows(PF)); !fit.at_end(); ++fit ) 
+	for ( auto fit = entire(rows(PF)); !fit.at_end(); ++fit ) 
 	  if ( abs((*fit)[c]) > 1 )
 	    throw std::runtime_error("project_with_subdivision: not a valid projection coordinate\n");       
-	for ( Entire<Rows<Matrix<Integer> > >::const_iterator sdit = entire(rows(PSubdivision)); !sdit.at_end(); ++sdit ) 
+	for ( auto sdit = entire(rows(PSubdivision)); !sdit.at_end(); ++sdit ) 
 	  if ( abs((*sdit)[c]) > 1 )
 	    throw std::runtime_error("project_with_subdivision: not a valid projection coordinate\n");       
 
@@ -169,20 +171,19 @@ namespace polymake { namespace polytope { namespace subdivision {
       Vector<subdivision::SubdivisionCell> cells = subdivision::compute_cells ( V, F, S );
       Array<Set<int> > lp_in_cells(cells.dim());
       int j = 0;
-      for ( Entire<Vector<subdivision::SubdivisionCell> >::const_iterator c = entire( cells );  !c.at_end(); ++c ) {
-	Set<int> S;
-	for ( Entire<Rows<Matrix<Rational> > >:: const_iterator v = entire(rows((*c).vertices()));
-	      !v.at_end(); ++v ) {
-	  int i = 0;
-	  while ( i < L.rows() && *v != L.row(i) ) ++i;
-	  if ( i == L.rows() ) {
-	    exit(1);
-	  } else {
-	    S += i;
-	  }
-	}
-	lp_in_cells[j++] = S;
-      }
+      for ( auto c = entire( cells );  !c.at_end(); ++c ) {
+			Set<int> S2;
+			for ( auto v = entire(rows((*c).vertices())); !v.at_end(); ++v ) {
+		  int i = 0;
+		  while ( i < L.rows() && *v != L.row(i) ) ++i;
+	  	if ( i == L.rows() ) {
+	    	exit(1);
+		  } else {
+		    S2 += i;
+	 	 }
+		}
+		lp_in_cells[j++] = S2;
+    }
 
       return lp_in_cells;
     }
@@ -196,7 +197,7 @@ namespace polymake { namespace polytope { namespace subdivision {
       
       const Vector<subdivision::SubdivisionCell> cells = subdivision::compute_cells ( V, F, S );
       
-      for ( Entire<Vector<subdivision::SubdivisionCell> >::const_iterator c = entire( cells ); 
+      for ( auto c = entire( cells ); 
 	    !c.at_end(); ++c ) 
 	if ( !(*c).integral() ) {
 	  return false;

@@ -58,8 +58,8 @@ namespace polymake { namespace polytope {
     
     UserFunction4perl("# Category: Extension: projection with subdivision\n"
 		      "# produces the push-forward subdivision of a polytope"
-		      "# @param Polytope<Rational> the polytope"
-		      "# @param c the projection coordinate (not that this is in the range 1..[[CONE_DIM]-1])",
+		      "# @param Polytope<Rational> p the polytope"
+		      "# @param Int c the projection coordinate (not that this is in the range 1..[[CONE_DIM]-1])",
 		      &project_with_subdivision, 
 		      "project_with_subdivision(Polytope,$)");
     

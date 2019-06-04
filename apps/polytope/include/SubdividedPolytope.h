@@ -24,12 +24,15 @@
 #include <polymake/Graph.h>
 #include <polymake/Array.h>
 #include <polymake/IncidenceMatrix.h>
+#include "polymake/graph/compare.h"
+
 
 #include <polymake/linalg.h>
 
 #include <polymake/common/lattice_tools.h>
-#include <polymake/graph/HasseDiagram.h>
-#include <polymake/polytope/cdd_interface.h>
+//#include <polymake/graph/HasseDiagram.h>
+#include "polymake/polytope/convex_hull.h"
+#include "polymake/polytope/cdd_interface.h"
 #include <polymake/polytope/face_lattice_tools.h>
 
 #include <polymake/polytope/subdivision_tools.h>
@@ -105,8 +108,8 @@ namespace polymake { namespace polytope { namespace subdivision {
 	_subdivision_hyperplanes = S;
 
 	Matrix<Rational> AH(0,F.cols());
-	cdd_interface::solver<Rational> solver;
-	std::pair<Matrix<Rational>,Matrix<Rational> > primal_description = solver.enumerate_vertices(Matrix<Rational>(_facets),AH);
+	cdd_interface::ConvexHullSolver<Rational> solver;
+	std::pair<Matrix<Rational>,Matrix<Rational> > primal_description = solver.enumerate_vertices(Matrix<Rational>(_facets),AH,0);
 	if ( primal_description.second.rows() > 0 )
 	  { throw std::runtime_error("SubdividedPolytope: created polytope is not full dimensional\n"); }
 	_vertices = primal_description.first;
@@ -123,8 +126,8 @@ namespace polymake { namespace polytope { namespace subdivision {
 	_subdivision_hyperplanes = common::primitive(S);
 
 	Matrix<Rational> AH(0,F.cols());
-	cdd_interface::solver<Rational> solver;
-	std::pair<Matrix<Rational>,Matrix<Rational> > primal_description = solver.enumerate_vertices(Matrix<Rational>(_facets),AH);
+	cdd_interface::ConvexHullSolver<Rational> solver;
+	std::pair<Matrix<Rational>,Matrix<Rational> > primal_description = solver.enumerate_vertices(Matrix<Rational>(_facets),AH,0);
 	if ( primal_description.second.rows() > 0 )
 	  { throw std::runtime_error("SubdividedPolytope: created polytope is not full dimensional\n"); }
 	_vertices = primal_description.first;
@@ -145,13 +148,14 @@ namespace polymake { namespace polytope { namespace subdivision {
 	q1.take("FACETS") << F;
 	q1.take("AFFINE_HULL") << empty;
 	q2.take("VERTICES_IN_FACETS") << vifcheck;   // FIXME this is not the intended solution, we should be able to check incidence matrices directly
-	if ( !CallPolymakeFunction("isomorphic", q1, q2 ) )  
+	const IncidenceMatrix<> M1=q1.give("RAYS_IN_FACETS"), M2=q2.give("RAYS_IN_FACETS");
+	if ( !graph::isomorphic(M1, M2) )  
 	  throw std::runtime_error("SubdividedPolytope: coordinate input not valid\n"); 
-        IncidenceMatrix<> VIF = q1.give("VERTICES_IN_FACETS"); // need an explicit type for this...
-        _vif = VIF;
+  IncidenceMatrix<> VIF = q1.give("VERTICES_IN_FACETS"); // need an explicit type for this...
+  _vif = VIF;
 	Graph<> DG = q1.give("DUAL_GRAPH.ADJACENCY");
 	_dg = DG;
-      }
+  }
 
       // provide complete set of data
       SubdividedPolytope(const Matrix<Integer> & F, const Matrix<Rational>& V, const Matrix<Integer> & S, 

@@ -25,7 +25,9 @@
 #include <polymake/Integer.h>
 #include <polymake/Set.h>
 #include <polymake/Graph.h>
-#include <polymake/graph/HasseDiagram.h>
+#include "polymake/graph/Lattice.h"
+#include "polymake/graph/Decoration.h"
+//#include <polymake/graph/HasseDiagram.h>
 #include <polymake/polytope/face_lattice_tools.h>
 #include <polymake/linalg.h>
 

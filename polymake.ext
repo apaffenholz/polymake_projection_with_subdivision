@@ -1,0 +1,19 @@
+
+# URI is a unique identifier assigned to this extension.
+# This is the only mandatory entry in this file.
+URI http://polymake.org/polytopes/paffenholz/data/polymake/extensions/ProjectionWithSubdivision#0.1
+
+# NAME project_with_subdivision
+# short name of the extension
+
+
+# CREDIT
+#  see https://polymake.org/polytopes/paffenholz/www/rut.html
+#  copyright Andreas Paffenholz 2012-2019
+
+
+REQUIRE
+   bundled:lrs
+   bundled:cdd
+
+

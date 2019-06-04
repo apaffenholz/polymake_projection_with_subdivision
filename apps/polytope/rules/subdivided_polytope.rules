@@ -19,10 +19,9 @@ user_function lattice_subdivision(Matrix<Rational>, Matrix<Integer>, Matrix<Inte
 
 user_function subdivision_cells(Matrix<Rational>, Matrix<Integer>, Matrix<Integer>, Matrix<Integer>) : c++ (include => [ "polymake/polytope/subdivisions.h" ]);
 
-object LatticePolytope {
 
     # a subdivision of the polytope
-    declare object Subdivision {
+	declare object Subdivision {
 	
 	# the hyperplanes defining a subdivision
 	property SUBDIVISION_HYPERPLANES : Matrix<Integer>;
@@ -38,6 +37,8 @@ object LatticePolytope {
 	property CELLS : Array<Set<Int>>;
 	
     }
+
+	object Polytope<Rational> {
 
     # a subdivision of the polytope
     property SUBDIVISION : Subdivision : multiple;
@@ -106,7 +107,7 @@ object LatticePolytope {
 	$this->SUBDIVISION->LATTICE_SUBDIVISION = lattice_subdivision($this->VERTICES, $f, $s);
     }
     
-    rule SUBDIVISION.VALID_PROJECTION_COORDINATES : FACETS {
+    rule SUBDIVISION(any).VALID_PROJECTION_COORDINATES : FACETS {
 
 	my $s = new Set<Int>();
 	my $m = primitive(new Matrix<Rational>($this->FACETS));
@@ -122,7 +123,7 @@ object LatticePolytope {
 	    my $b = 1;
 	    my $j = 0;
 	    while ( $j < $m->rows() && $b ) {
-		if ( abs($m->($j,$i) ) > 1 ) { $b = 0; }
+		if ( abs($m->elem($j,$i) ) > 1 ) { $b = 0; }
 		++$j;
 	    }
 	    if ( $b ) { $s += $i; }
@@ -146,38 +147,7 @@ object LatticePolytope {
 
 
 
-################################################
-############## subdivision user methods
 
-
-    object Subdivision {
-
-# returns a particular cell of the SUBDIVISION
-# @param n the index of the cell
-# @return Polytope the cell
-	
-	user_method CELL {
-	    
-	    my $this = shift;
-	    my $n = shift;
-	    if ( !defined( $this->parent->lookup("SUBDIVISION") )
-		 || !defined( $this->parent->lookup("SUBDIVISION.SUBDIVISION_HYPERPLANES") ) ) {
-		return $this->parent;
-	    }
-	    my $c = $this->CELLS;
-	    
-	    my $lp_gen = $this->parent->give("LATTICE_POINTS_GENERATORS");
-	    my $lp = $lp_gen->[0];  # we hopefully have a bounded polytope
-	    
-	    if ( $n >= scalar(@{$c}) ) {
-		die "range error\n";
-	    } else {
-		my $q = new Polytope<Rational>(POINTS=>$lp->minor($c->[$n],All));
-		return $q;
-	    }
-	}
-
-    }
     
 ##############
 #### visualization of a subdivsion
@@ -237,11 +207,42 @@ object LatticePolytope {
     
 }
 
+################################################
+############## subdivision user methods
+
+
+    object Subdivision {
+
+	# returns a particular cell of the SUBDIVISION
+	# @param Int n the index of the cell
+	# @return Polytope the cell
+	user_method CELL {
+	    
+	    my $this = shift;
+	    my $n = shift;
+	    if ( !defined( $this->parent->lookup("SUBDIVISION") )
+		 || !defined( $this->parent->lookup("SUBDIVISION.SUBDIVISION_HYPERPLANES") ) ) {
+		return $this->parent;
+	    }
+	    my $c = $this->CELLS;
+	    
+	    my $lp_gen = $this->parent->give("LATTICE_POINTS_GENERATORS");
+	    my $lp = $lp_gen->[0];  # we hopefully have a bounded polytope
+	    
+	    if ( $n >= scalar(@{$c}) ) {
+		die "range error\n";
+	    } else {
+		my $q = new Polytope<Rational>(POINTS=>$lp->minor($c->[$n],All));
+		return $q;
+	    }
+	}
+
+    }
 
 # projects a polytope with [[SUBDIVISION]]
 # along a sequence of coordinates
-# @param Polytope the polytope to project
-# @param Array<int> an array of coordinates
+# @param Polytope p the polytope to project
+# @param Array<int> a an array of coordinates
 # @return Polytope the projected polytope
 
     user_function project_along_sequence ( Polytope, Array )  {

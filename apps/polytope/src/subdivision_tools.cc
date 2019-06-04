@@ -33,12 +33,12 @@ namespace polymake { namespace polytope { namespace subdivision {
 	
 	perl::Object q("Polytope<Rational>");
 	q.take("VERTICES_IN_FACETS") << VIF;
-	graph::HasseDiagram HD = q.give("HASSE_DIAGRAM");
-	const graph::HasseDiagram::nodes_of_dim_set facet_nodes=HD.nodes_of_dim(-1);
+	graph::Lattice<graph::lattice::BasicDecoration, graph::lattice::Sequential> HD = q.give("HASSE_DIAGRAM");
+	const graph::Lattice<graph::lattice::BasicDecoration, graph::lattice::Sequential>::nodes_of_rank_type facet_nodes=HD.nodes_of_rank(HD.rank()-1);
 	Graph<> G(facet_nodes.size());
 	
 	fill_dual_graph(G, 
-			entire(select(rows(adjacency_matrix(HD.graph())),HD.nodes_of_dim(-2))), 
+			entire(select(rows(adjacency_matrix(HD.graph())),HD.nodes_of_rank(HD.rank()-2))), 
 			facet_nodes.front() );
 	
 	return G;
@@ -71,9 +71,9 @@ namespace polymake { namespace polytope { namespace subdivision {
       // FIXME not very efficient
       Matrix<Integer> make_equations_unique(const Matrix<Integer> & M ) {
 	Matrix<Integer> N(0,M.cols());
-	for ( Entire<Rows<Matrix<Integer> > >::const_iterator mit = entire(rows(M)); !mit.at_end(); ++mit ) {
+	for ( auto mit = entire(rows(M)); !mit.at_end(); ++mit ) {
 	  bool known = false;
-	  for ( Entire<Rows<Matrix<Integer> > >::iterator nit = entire(rows(N)); !nit.at_end() && !known; ++nit )
+	  for ( auto nit = entire(rows(N)); !nit.at_end() && !known; ++nit )
 	    if ( (*nit) == (*mit) || (*nit) == -(*mit) )
 	      known = true;
 	  if ( !known )
